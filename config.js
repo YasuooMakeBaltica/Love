@@ -4,7 +4,7 @@
 
 const CONFIG = {
   // Shown at the top of the page.
-  names: "You & Me",
+  names: "Octavian & Ema",
 
   // When we started dating: 8 October 2025, 15:35 Romania time.
   // The "together for" counter and the milestones count from here.
@@ -24,10 +24,12 @@ const CONFIG = {
 
   // Your personal note. Each string is its own paragraph.
   message: [
-    "[Write your message to her here.]",
-    "[Add as many paragraphs as you like. Each one goes in its own quotes, separated by commas.]",
+    "It's finally been a year,",
+    "We've been together for this long and my love for you never faded :3",
+    "I still remember all the goofy things we did like riding that carnival ride until we both almost puked, or the time you almost died trying to make me fall",
+    "No matter how much time passes I know we'll be together forever bae",
   ],
-  signature: "[Your name]",
+  signature: "Love, Octavian :3",
 
   // Milestones: use `days` or `months` from the start date.
   milestones: [
