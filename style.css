@@ -171,6 +171,20 @@ footer {
   padding: 16px 0;
 }
 
+/* ── Fireworks ────────────────────────────────── */
+
+.fireworks {
+  position: fixed;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+  background: rgba(22, 6, 20, 0.9);
+  opacity: 0;
+  transition: opacity 1.2s ease;
+}
+
+.fireworks.show { opacity: 1; }
+
 /* ── Floating hearts ──────────────────────────── */
 
 .hearts {

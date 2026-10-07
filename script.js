@@ -1,6 +1,8 @@
 (function () {
   const start = new Date(CONFIG.startDate);
-  const countdownTo = new Date(CONFIG.countdownTo);
+  // Open the page with ?preview to watch the countdown hit zero in 5 seconds.
+  const preview = new URLSearchParams(location.search).has("preview");
+  const countdownTo = preview ? new Date(Date.now() + 5000) : new Date(CONFIG.countdownTo);
   const DAY = 24 * 60 * 60 * 1000;
 
   const $ = (sel) => document.querySelector(sel);
@@ -59,7 +61,8 @@
 
     if (together !== wasCounting) {
       $("#counter-title").textContent = together ? CONFIG.datingTitle : CONFIG.countdownTitle;
-      if (wasCounting === false) celebrate();
+      // Celebrate when the countdown hits zero, or on opening the page later that anniversary day.
+      if (wasCounting === false || (wasCounting === null && together && isAnniversary(now, parts))) celebrate();
       wasCounting = together;
       renderMilestones();
     }
@@ -164,9 +167,10 @@
     heartLayer.appendChild(h);
   }
 
-  // A burst of hearts for the moment the countdown hits zero.
+  // Fireworks and a burst of hearts for the moment the countdown hits zero.
   function celebrate() {
     if (reducedMotion) return;
+    launchFireworks(9000);
     for (let i = 0; i < 40; i++) setTimeout(spawnHeart, i * 60);
   }
 
