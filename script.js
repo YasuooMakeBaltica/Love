@@ -125,7 +125,7 @@
       });
   }
 
-  // ── Message & gallery ─────────────────────────────
+  // ── Message ───────────────────────────────────────
 
   function renderMessage() {
     $("#names").textContent = CONFIG.names;
@@ -138,43 +138,6 @@
     });
     $("#signature").textContent = CONFIG.signature;
   }
-
-  function renderGallery() {
-    const gallery = $("#gallery");
-    if (!CONFIG.photos.length) {
-      gallery.innerHTML = '<p class="empty">Our photos will live here 📸</p>';
-      return;
-    }
-    CONFIG.photos.forEach((photo) => {
-      const fig = document.createElement("figure");
-      const img = document.createElement("img");
-      img.src = photo.src;
-      img.alt = photo.caption || "";
-      img.loading = "lazy";
-      fig.appendChild(img);
-      if (photo.caption) {
-        const cap = document.createElement("figcaption");
-        cap.textContent = photo.caption;
-        fig.appendChild(cap);
-      }
-      fig.addEventListener("click", () => openLightbox(photo));
-      gallery.appendChild(fig);
-    });
-  }
-
-  const lightbox = $("#lightbox");
-  function openLightbox(photo) {
-    lightbox.querySelector("img").src = photo.src;
-    lightbox.querySelector("img").alt = photo.caption || "";
-    lightbox.querySelector("figcaption").textContent = photo.caption || "";
-    lightbox.hidden = false;
-  }
-  lightbox.addEventListener("click", (e) => {
-    if (e.target.tagName !== "IMG") lightbox.hidden = true;
-  });
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") lightbox.hidden = true;
-  });
 
   // ── Floating hearts ───────────────────────────────
 
@@ -203,7 +166,6 @@
   // ── Start ─────────────────────────────────────────
 
   renderMessage();
-  renderGallery();
   tick();
   setInterval(tick, 1000);
   setInterval(renderMilestones, 60 * 1000);

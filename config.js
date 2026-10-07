@@ -24,10 +24,6 @@ const CONFIG = {
   ],
   signature: "[Your name]",
 
-  // Photo gallery. Put the image files in the photos/ folder, then list them here:
-  //   { src: "photos/first-date.jpg", caption: "Our first date" },
-  photos: [],
-
   // Milestones: use `days` or `months` from the start date.
   milestones: [
     { label: "Our first day", days: 1 },

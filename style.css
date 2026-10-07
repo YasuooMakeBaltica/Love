@@ -164,80 +164,6 @@ h1, h2 {
 .milestones .reached .status { color: var(--rose); }
 .milestones .next .status { color: var(--rose-deep); }
 
-/* ── Gallery ──────────────────────────────────── */
-
-.gallery {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-  gap: 12px;
-}
-
-.gallery figure { margin: 0; cursor: zoom-in; }
-
-.gallery img {
-  width: 100%;
-  aspect-ratio: 1;
-  object-fit: cover;
-  border-radius: 16px;
-  box-shadow: var(--shadow);
-  display: block;
-  transition: transform 0.2s ease;
-}
-
-.gallery figure:hover img { transform: scale(1.03) rotate(-0.5deg); }
-
-.gallery figcaption {
-  margin-top: 6px;
-  font-size: 0.85rem;
-  text-align: center;
-  color: var(--ink-soft);
-}
-
-.gallery .empty {
-  grid-column: 1 / -1;
-  text-align: center;
-  color: var(--ink-soft);
-  padding: 24px 8px;
-  border: 2px dashed var(--blush);
-  border-radius: 16px;
-}
-
-/* ── Lightbox ─────────────────────────────────── */
-
-.lightbox {
-  position: fixed;
-  inset: 0;
-  z-index: 10;
-  background: rgba(90, 58, 74, 0.85);
-  display: grid;
-  place-items: center;
-  padding: 16px;
-}
-
-.lightbox[hidden] { display: none; }
-
-.lightbox figure { margin: 0; text-align: center; }
-
-.lightbox img {
-  max-width: 100%;
-  max-height: 80vh;
-  border-radius: 16px;
-}
-
-.lightbox figcaption { color: #fff; margin-top: 10px; }
-
-.lightbox-close {
-  position: absolute;
-  top: 12px;
-  right: 16px;
-  background: none;
-  border: none;
-  color: #fff;
-  font-size: 2.5rem;
-  line-height: 1;
-  cursor: pointer;
-}
-
 footer {
   text-align: center;
   color: var(--ink-soft);
@@ -277,5 +203,4 @@ footer {
 
 @media (prefers-reduced-motion: reduce) {
   .hearts { display: none; }
-  .gallery img { transition: none; }
 }
