@@ -1,5 +1,6 @@
 (function () {
   const start = new Date(CONFIG.startDate);
+  const countdownTo = new Date(CONFIG.countdownTo);
   const DAY = 24 * 60 * 60 * 1000;
 
   const $ = (sel) => document.querySelector(sel);
@@ -43,9 +44,9 @@
 
   function tick() {
     const now = new Date();
-    const together = now >= start;
-    // Round the countdown up to the next whole second so it hits 0 exactly at the start.
-    const parts = together ? diff(start, now) : diff(new Date(now.getTime() - 999), start);
+    const together = now >= countdownTo;
+    // Round the countdown up to the next whole second so it hits 0 exactly on time.
+    const parts = together ? diff(start, now) : diff(new Date(now.getTime() - 999), countdownTo);
 
     for (const [name, u] of Object.entries(units)) {
       const n = parts[name];
@@ -65,12 +66,18 @@
 
     if (together) {
       const totalDays = Math.floor((now - start) / DAY);
-      $("#counter-sub").textContent = totalDays === 0
-        ? "Day one 💗"
+      $("#counter-sub").textContent = isAnniversary(now, parts)
+        ? `Happy anniversary 💗 That's ${plural(totalDays, "day")} together`
         : `That's ${plural(totalDays, "day")} and counting 💗`;
     } else {
-      $("#counter-sub").textContent = `Starts ${formatDate(start, true)}`;
+      $("#counter-sub").textContent = `Our anniversary · ${formatDate(countdownTo, true)}`;
     }
+  }
+
+  // True on the calendar day of each anniversary (Romania time).
+  function isAnniversary(now, parts) {
+    const dayMonth = (d) => d.toLocaleDateString("en-GB", { day: "numeric", month: "numeric", timeZone: CONFIG.timeZone });
+    return parts.years > 0 && dayMonth(now) === dayMonth(start);
   }
 
   function formatDate(date, withTime) {

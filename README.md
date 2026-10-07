@@ -2,8 +2,8 @@
 
 A little website with a live tracker for how long we've been together.
 
-- Before **8 October 2026, 15:35 (Romania time)** it counts down to the start.
-- After that, it counts up how long we've been together, in years, months, days, hours, minutes and seconds.
+- Until our 1st anniversary, **8 October 2026 at 15:35 (Romania time)**, it counts down to it.
+- After that, it counts up how long we've been together since **8 October 2025, 15:35**, in years, months, days, hours, minutes and seconds.
 - It also has a personal message and automatic milestones (1 week, 100 days, 1 year…).
 
 ## Personalising it

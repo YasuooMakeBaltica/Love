@@ -6,15 +6,20 @@ const CONFIG = {
   // Shown at the top of the page.
   names: "You & Me",
 
-  // The moment it all starts: 8 October 2026, 15:35 Romania time.
+  // When we started dating: 8 October 2025, 15:35 Romania time.
+  // The "together for" counter and the milestones count from here.
   // (+03:00 is Romanian summer time, which is in effect on 8 October.)
-  startDate: "2026-10-08T15:35:00+03:00",
+  startDate: "2025-10-08T15:35:00+03:00",
+
+  // Until this moment the page counts down to it (our 1st anniversary),
+  // then switches to counting how long we've been together.
+  countdownTo: "2026-10-08T15:35:00+03:00",
 
   // Used to show milestone dates in Romanian time, wherever the page is opened.
   timeZone: "Europe/Bucharest",
 
-  // Heading above the counter before and after the start moment.
-  countdownTitle: "Counting down to the start of us",
+  // Heading above the counter before and after the countdown ends.
+  countdownTitle: "Time until our anniversary",
   datingTitle: "We've been together for",
 
   // Your personal note. Each string is its own paragraph.
