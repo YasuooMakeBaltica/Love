@@ -170,7 +170,7 @@
   // Fireworks and a burst of hearts for the moment the countdown hits zero.
   function celebrate() {
     if (reducedMotion) return;
-    launchFireworks(9000);
+    launchFireworks();
     for (let i = 0; i < 40; i++) setTimeout(spawnHeart, i * 60);
   }
 

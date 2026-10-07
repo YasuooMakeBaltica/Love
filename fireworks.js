@@ -1,4 +1,5 @@
 // Full-screen fireworks show, drawn on a canvas over a dimmed page.
+// Includes three rockets that spell out "I", "LOVE", "YOU".
 // Usage: launchFireworks(durationMs)
 
 (function () {
@@ -31,12 +32,60 @@
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   }
 
-  function launchRocket() {
-    const x = rand(0.15, 0.85) * innerWidth;
+  const WORDS = ["I", "LOVE", "YOU"];
+  const WORD_COLORS = ["#ff6fa5", "#ffd1e0"];
+  // Word particles fly into place, hold, then drop and fade (ms).
+  const WORD_FORM = 450, WORD_HOLD_UNTIL = 1800, WORD_LIFE = 2400;
+
+  // `sidesOnly` keeps a rocket out of the middle while the words are showing.
+  function launchRocket(sidesOnly) {
+    const side = Math.random() < 0.5 ? rand(0.05, 0.25) : rand(0.75, 0.95);
+    const x = (sidesOnly ? side : rand(0.15, 0.85)) * innerWidth;
     const targetY = rand(0.12, 0.45) * innerHeight;
     // Speed needed to coast up to targetY under gravity.
     const vy = -Math.sqrt(2 * ROCKET_GRAVITY * (innerHeight - targetY));
     rockets.push({ x, y: innerHeight, vx: rand(-0.03, 0.03), vy, color: pick(COLORS) });
+  }
+
+  function launchWordRocket(word) {
+    const targetY = 0.3 * innerHeight;
+    const vy = -Math.sqrt(2 * ROCKET_GRAVITY * (innerHeight - targetY));
+    rockets.push({ x: innerWidth / 2, y: innerHeight, vx: 0, vy, color: WORD_COLORS[0], word });
+  }
+
+  // Points covering the word's letters, relative to its centre.
+  function wordPoints(word) {
+    const size = Math.min(innerWidth * 0.3, 160);
+    const c = document.createElement("canvas");
+    c.width = Math.ceil(size * 0.8 * word.length + size * 0.4);
+    c.height = Math.ceil(size * 1.3);
+    const g = c.getContext("2d");
+    g.font = `600 ${size}px Quicksand, sans-serif`;
+    g.textAlign = "center";
+    g.textBaseline = "middle";
+    g.fillText(word, c.width / 2, c.height / 2);
+    const data = g.getImageData(0, 0, c.width, c.height).data;
+    const gap = Math.max(4, Math.round(size / 24));
+    const points = [];
+    for (let y = 0; y < c.height; y += gap) {
+      for (let x = 0; x < c.width; x += gap) {
+        if (data[(y * c.width + x) * 4 + 3] > 128) points.push([x - c.width / 2, y - c.height / 2]);
+      }
+    }
+    return points;
+  }
+
+  function explodeWord(x, y, word) {
+    wordPoints(word).forEach(([tx, ty], i) => {
+      particles.push({
+        x, y, ox: x, oy: y, tx, ty, vx: 0, vy: 0,
+        color: WORD_COLORS[i % 2],
+        life: 0,
+        maxLife: WORD_LIFE + rand(-150, 150),
+        size: rand(1.6, 2.2),
+        word: true,
+      });
+    });
   }
 
   function explode(x, y, color) {
@@ -82,7 +131,8 @@
       // Spark trail.
       particles.push({ x: r.x + rand(-1, 1), y: r.y, vx: rand(-0.02, 0.02), vy: rand(0, 0.03), color: "#ffd9a0", life: 0, maxLife: 180, size: 1.1 });
       if (r.vy >= -0.05) {
-        explode(r.x, r.y, r.color);
+        if (r.word) explodeWord(r.x, r.y, r.word);
+        else explode(r.x, r.y, r.color);
         rockets.splice(i, 1);
       }
     }
@@ -91,6 +141,12 @@
       const p = particles[i];
       p.life += dt;
       if (p.life >= p.maxLife) { particles.splice(i, 1); continue; }
+      if (p.word && p.life < WORD_HOLD_UNTIL) {
+        const k = 1 - Math.pow(1 - Math.min(p.life / WORD_FORM, 1), 3); // ease-out
+        p.x = p.ox + p.tx * k;
+        p.y = p.oy + p.ty * k;
+        continue;
+      }
       p.vx *= drag;
       p.vy = p.vy * drag + PARTICLE_GRAVITY * dt * (p.heart ? 0.5 : 1);
       p.x += p.vx * dt;
@@ -108,7 +164,9 @@
       ctx.fill();
     }
     for (const p of particles) {
-      const fade = 1 - p.life / p.maxLife;
+      const fade = p.word
+        ? Math.min(1, (p.maxLife - p.life) / (p.maxLife - WORD_HOLD_UNTIL))
+        : 1 - p.life / p.maxLife;
       // Soft glow, then a bright core.
       ctx.globalAlpha = fade * 0.25;
       ctx.fillStyle = p.color;
@@ -124,16 +182,22 @@
     ctx.globalCompositeOperation = "source-over";
   }
 
-  window.launchFireworks = function (duration = 9000) {
+  window.launchFireworks = function (duration = 13000) {
     if (running) return;
     if (!canvas) setup();
     running = true;
     canvas.classList.add("show");
 
-    // Steady launches, then a big finale.
-    const timers = [];
-    for (let t = 300; t < duration - 2000; t += rand(280, 520)) timers.push(setTimeout(launchRocket, t));
-    for (let i = 0; i < 7; i++) timers.push(setTimeout(launchRocket, duration - 2000 + i * 90));
+    // Steady launches, "I" "LOVE" "YOU" in the middle, then a big finale.
+    const wordsFrom = 2000, wordGap = 2300;
+    const wordsUntil = wordsFrom + WORDS.length * wordGap + 1500;
+    WORDS.forEach((word, i) => setTimeout(() => launchWordRocket(word), wordsFrom + i * wordGap));
+    for (let t = 300; t < duration - 2000; t += rand(280, 520)) {
+      const duringWords = t > wordsFrom && t < wordsUntil;
+      if (duringWords && Math.random() < 0.4) continue; // thin out so the words stand out
+      setTimeout(() => launchRocket(duringWords), t);
+    }
+    for (let i = 0; i < 7; i++) setTimeout(() => launchRocket(false), duration - 2000 + i * 90);
 
     let last = performance.now();
     const startedAt = last;
