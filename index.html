@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Us</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💗</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Quicksand:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="hearts" aria-hidden="true"></div>
+
+  <main>
+    <header class="hero">
+      <h1 id="names">You &amp; Me</h1>
+      <p id="counter-title" class="counter-title"></p>
+
+      <div class="counter" role="timer" aria-live="off">
+        <div class="unit" data-unit="years"><span class="value">0</span><span class="label">years</span></div>
+        <div class="unit" data-unit="months"><span class="value">0</span><span class="label">months</span></div>
+        <div class="unit" data-unit="days"><span class="value">0</span><span class="label">days</span></div>
+        <div class="unit" data-unit="hours"><span class="value">0</span><span class="label">hours</span></div>
+        <div class="unit" data-unit="minutes"><span class="value">0</span><span class="label">minutes</span></div>
+        <div class="unit" data-unit="seconds"><span class="value">0</span><span class="label">seconds</span></div>
+      </div>
+
+      <p id="counter-sub" class="counter-sub"></p>
+    </header>
+
+    <section class="card message">
+      <h2>For you</h2>
+      <div id="message-body"></div>
+      <p id="signature" class="signature"></p>
+    </section>
+
+    <section class="card">
+      <h2>Milestones</h2>
+      <ol id="milestones" class="milestones"></ol>
+    </section>
+
+    <section class="card">
+      <h2>Us</h2>
+      <div id="gallery" class="gallery"></div>
+    </section>
+
+    <footer>made with love 💗</footer>
+  </main>
+
+  <div id="lightbox" class="lightbox" hidden>
+    <button class="lightbox-close" aria-label="Close">×</button>
+    <figure>
+      <img alt="">
+      <figcaption></figcaption>
+    </figure>
+  </div>
+
+  <script src="config.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
